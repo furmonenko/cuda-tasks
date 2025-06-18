@@ -196,4 +196,4 @@ The system provides a solid foundation for real-time video processing applicatio
 - **GPU**: NVIDIA GeForce RTX 3070 Ti Laptop GPU
 - **CUDA**: Version 12.x
 - **Framework**: OpenCV 4.x, CUDA Runtime
-- **Platform**: Windows 11 with WSL2
+- **Platform**: Windows 11

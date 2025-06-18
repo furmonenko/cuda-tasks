@@ -49,8 +49,16 @@ nvcc --version
 
 # Dependencies
 sudo apt-get install cmake build-essential
-# OpenCV (included in projects)
 ```
+
+### ⚠️ Important: External Dependencies Setup
+
+**Tasks 3 & 4 require external libraries** (OpenCV, Google Test, etc.) that are excluded from this repository to reduce size.
+
+**Before building Tasks 3 & 4:**
+1. See [SETUP_DEPENDENCIES.md](./SETUP_DEPENDENCIES.md) for complete setup instructions
+2. Download required libraries (OpenCV, GTest, cxxopts, plog)
+3. Total download size: ~315-475MB per task
 
 ### Building Projects
 ```bash
@@ -64,7 +72,8 @@ cd "Task 2" && mkdir build && cd build
 cmake .. -DCMAKE_BUILD_TYPE=Release
 make -j4
 
-# Task 3 & 4: Webcam Filter Applications
+# Task 3 & 4: Setup dependencies FIRST!
+# See SETUP_DEPENDENCIES.md, then:
 cd "Task 3/cuda-webcam-filter" && mkdir build && cd build
 cmake .. -DCMAKE_BUILD_TYPE=Release
 make -j4

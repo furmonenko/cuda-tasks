@@ -1,17 +1,17 @@
-# Build Instructions for HDR Tone Mapping CUDA Webcam Filter
+# Build Instructions for Advanced Filter Pipeline CUDA Webcam Filter
 
 ## ⚠️ Prerequisites: External Dependencies
 
 **IMPORTANT: You must set up external dependencies before building!**
 
 1. **Read [SETUP_DEPENDENCIES.md](../SETUP_DEPENDENCIES.md)** in the project root
-2. **Download required libraries**: OpenCV, Google Test, cxxopts, plog (~315MB total)
+2. **Download required libraries**: OpenCV, Google Test, cxxopts, plog (~475MB total)
 3. **Follow the setup instructions** completely before proceeding with build
 
 ## System Requirements
 - **OS**: Windows 10/11 or Ubuntu 20.04+
 - **GPU**: CUDA-capable GPU (Compute Capability 6.0+)
-- **RAM**: Minimum 8GB, recommended 16GB
+- **RAM**: Minimum 8GB, recommended 16GB for multi-stream processing
 
 ### Required Software
 
@@ -70,7 +70,19 @@ sudo apt-get install libtbb-dev
 
 ## Build Process
 
-### Step 1: Configure GPU Architecture
+### Step 1: Set Up External Dependencies
+**CRITICAL**: Complete dependency setup before building:
+```bash
+# Follow instructions in SETUP_DEPENDENCIES.md
+# Ensure external/ directory contains:
+# - opencv/
+# - opencv_contrib/
+# - gtest/
+# - cxxopts/
+# - plog/
+```
+
+### Step 2: Configure GPU Architecture
 **IMPORTANT**: Edit `CMakeLists.txt` to match your GPU:
 
 ```cmake
@@ -97,14 +109,14 @@ nvidia-smi
 # Search your GPU model at: https://developer.nvidia.com/cuda-gpus
 ```
 
-### Step 2: Create Build Directory
+### Step 3: Create Build Directory
 ```bash
 cd cuda-webcam-filter
 mkdir build
 cd build
 ```
 
-### Step 3: Configure with CMake
+### Step 4: Configure with CMake
 ```bash
 # Basic configuration
 cmake ..
@@ -116,7 +128,7 @@ cmake -DCMAKE_C_COMPILER=gcc-12 -DCMAKE_CXX_COMPILER=g++-12 ..
 cmake -DCUDA_SUPPORT=OFF ..
 ```
 
-### Step 4: Build
+### Step 5: Build
 ```bash
 # Build with all available cores
 cmake --build . -j $(nproc)
@@ -138,6 +150,8 @@ make -j $(nproc)
 
 ### Build Steps (Windows)
 ```powershell
+# Set up external dependencies first (see SETUP_DEPENDENCIES.md)
+
 # Open Visual Studio Developer Command Prompt
 cd cuda-webcam-filter
 mkdir build
@@ -150,18 +164,68 @@ cmake .. -G "Visual Studio 17 2022" -A x64
 cmake --build . --config Release -j 8
 ```
 
+## Testing the Build
+
+### Basic Pipeline Tests
+```bash
+# Run with single filter
+./cuda-webcam-filter -f blur
+
+# Test basic pipeline
+./cuda-webcam-filter --pipeline "blur,sharpen"
+
+# Test multi-stream performance
+./cuda-webcam-filter --pipeline "blur,sharpen,hdr" --multi-stream
+
+# Test transitions
+./cuda-webcam-filter --pipeline "blur,edge" --transitions --wipe-speed 2.0
+```
+
+### Advanced Features
+```bash
+# Performance analysis
+./cuda-webcam-filter --pipeline "blur,sharpen,hdr,edge,emboss" --benchmark
+
+# Timing visualization
+./cuda-webcam-filter --pipeline "blur,sharpen,hdr" --timing-visualization
+
+# Dynamic pipeline modification
+./cuda-webcam-filter --pipeline "blur" --dynamic-pipeline
+```
+
+### Help and Options
+```bash
+# Show all options
+./cuda-webcam-filter --help
+
+# Version info
+./cuda-webcam-filter --version
+```
+
+## Performance Targets
+
+### Pipeline Performance
+- **Single filter**: 60+ FPS on RTX 3060+
+- **3-filter pipeline**: 45+ FPS on RTX 3060+
+- **5-filter pipeline**: 30+ FPS on RTX 3060+
+- **Multi-stream improvement**: 25-40% performance gain
+
+### Memory Requirements
+- **Single filter**: 2GB GPU memory
+- **5-filter pipeline**: 4GB GPU memory
+- **Multi-stream processing**: 6GB GPU memory
+
 ## Troubleshooting
 
 ### Common Issues
 
-#### 1. CUDA Not Found
+#### 1. External Dependencies Not Found
 ```bash
-# Set CUDA path manually
-export PATH=/usr/local/cuda/bin:$PATH
-export LD_LIBRARY_PATH=/usr/local/cuda/lib64:$LD_LIBRARY_PATH
+# Verify dependencies are set up
+ls external/
+# Should show: opencv, opencv_contrib, gtest, cxxopts, plog
 
-# Or in CMake
-cmake -DCUDA_TOOLKIT_ROOT_DIR=/usr/local/cuda ..
+# If missing, follow SETUP_DEPENDENCIES.md
 ```
 
 #### 2. OpenCV Build Fails
@@ -172,21 +236,26 @@ cmake ..
 cmake --build . -j 1  # Build with single core for better error visibility
 ```
 
-#### 3. GCC Version Issues
+#### 3. CUDA Streams Not Working
 ```bash
-# Force specific compiler
-cmake -DCMAKE_CUDA_HOST_COMPILER=/usr/bin/g++-12 ..
-```
-
-#### 4. GPU Architecture Mismatch
-```bash
-# Find your GPU compute capability
+# Check GPU supports concurrent kernels
 nvidia-smi --query-gpu=compute_cap --format=csv,noheader,nounits
-
-# Update CMakeLists.txt accordingly
+# Should be 6.0 or higher for full stream support
 ```
 
-### Build Options
+#### 4. Performance Issues
+```bash
+# Monitor GPU usage
+nvidia-smi -l 1
+
+# Check CPU usage
+htop
+
+# Enable debug timing
+./cuda-webcam-filter --pipeline "blur,sharpen" --debug-timing
+```
+
+## Build Options
 
 #### Enable Debug
 ```bash
@@ -203,74 +272,26 @@ cmake -DCUDA_SUPPORT=OFF ..
 cmake -DRUN_UNIT_TESTS=ON ..
 ```
 
-## Testing the Build
-
-### Basic Test
+#### Enable Performance Profiling
 ```bash
-# Run with webcam (default)
-./cuda-webcam-filter
-
-# Test HDR filter
-./cuda-webcam-filter -f hdr -e 1.5 -g 2.2
-
-# Test different algorithms
-./cuda-webcam-filter -f hdr --tone-algorithm drago -e 2.0
-./cuda-webcam-filter -f hdr --tone-algorithm mantiuk --saturation 1.2
-
-# With preview mode
-./cuda-webcam-filter -f hdr --preview
+cmake -DENABLE_PROFILING=ON ..
 ```
-
-### Help and Options
-```bash
-# Show all options
-./cuda-webcam-filter --help
-
-# Version info
-./cuda-webcam-filter --version
-```
-
-## Performance Optimization
-
-### GPU Memory
-- Ensure sufficient GPU memory (2GB+ for HD video)
-- Monitor GPU usage: `nvidia-smi -l 1`
-
-### CPU Usage
-- Use Release build for better performance
-- Monitor CPU usage during real-time processing
-
-### Frame Rate
-- Adjust exposure and parameters for optimal performance
-- Use preview mode to compare CPU vs GPU performance
-
-## Expected Results
-
-### Performance Targets
-- **1080p video**: 30+ FPS on RTX 3060+
-- **720p video**: 60+ FPS on RTX 3060+
-- **GPU Speedup**: 5-15x faster than CPU implementation
-
-### Visual Quality
-- Real-time HDR tone mapping effects
-- Preserved color accuracy
-- Smooth parameter adjustments
-- Professional-quality results
 
 ## Next Steps
 
 After successful build:
-1. Test with different webcam resolutions
-2. Experiment with HDR parameters
-3. Compare different tone mapping algorithms
-4. Monitor performance metrics
-5. Consider advanced optimizations (shared memory, texture memory)
+1. Test pipeline performance with different filter combinations
+2. Experiment with transition effects
+3. Compare single-stream vs multi-stream performance
+4. Monitor timing visualization for optimization opportunities
+5. Test dynamic pipeline modification features
 
 ## Support
 
 If you encounter issues:
-1. Check GPU drivers are up to date
-2. Verify CUDA installation with `nvcc --version`
-3. Ensure CMake finds all dependencies
-4. Check CMakeLists.txt GPU architecture settings
-5. Try CPU-only build first to isolate CUDA issues
+1. **First**: Ensure external dependencies are properly set up
+2. Check GPU drivers are up to date
+3. Verify CUDA installation with `nvcc --version`
+4. Ensure CMake finds all dependencies
+5. Check CMakeLists.txt GPU architecture settings
+6. Try CPU-only build first to isolate CUDA issues
