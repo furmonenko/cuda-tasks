@@ -1,0 +1,79 @@
+# Global .gitignore for CUDA projects
+
+# Build directories
+build/
+bin/
+lib/
+obj/
+x64/
+x86/
+Debug/
+Release/
+RelWithDebInfo/
+MinSizeRel/
+
+# Visual Studio
+*.vcxproj
+*.vcxproj.filters
+*.vcxproj.user
+*.sln
+*.suo
+*.user
+*.pdb
+*.exp
+*.ilk
+*.lib
+*.dll
+*.exe
+
+# CMake
+CMakeCache.txt
+CMakeFiles/
+cmake_install.cmake
+CPackConfig.cmake
+CPackSourceConfig.cmake
+CMakeVars.txt
+version_string.tmp
+opencv_data_config.hpp
+cv_cpu_config.h
+cvconfig.h
+custom_hal.hpp
+opencv_python_config.cmake
+setup_vars.cmd
+text_config.hpp
+compiler_settings.cmake
+
+# CUDA
+*.ptx
+*.cubin
+*.fatbin
+
+# Log files
+*.log
+*.pdb
+
+# Temporary files
+*.tmp
+tmp/
+testdata/
+downloads/
+python_loader/
+
+# IDE files
+.vs/
+.vscode/
+*.swp
+*.swo
+*~
+
+# OS files
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# Dependencies (keep external libraries in repo for easier setup)
+# external/ is kept for project dependencies
+
+# Results and output files (keep these for documentation)
+# results/*.csv
+# results/*.log
