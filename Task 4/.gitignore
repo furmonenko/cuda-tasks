@@ -1,0 +1,16 @@
+# Task 4 - Filter Pipeline
+cuda-webcam-filter/build/
+*.exe
+*.dll
+*.lib
+*.exp
+*.pdb
+CMakeCache.txt
+CMakeFiles/
+cmake_install.cmake
+
+# Keep external dependencies for easy setup
+!external/
+
+# Keep documentation
+!RESULTS.md
