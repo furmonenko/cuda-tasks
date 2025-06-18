@@ -1,0 +1,15 @@
+# Task 2 - Image Convolution  
+build/
+bin/
+*.exe
+*.dll
+*.lib
+*.exp
+*.pdb
+CMakeCache.txt
+CMakeFiles/
+cmake_install.cmake
+
+# Keep results
+\!results/
+\!RESULTS.md

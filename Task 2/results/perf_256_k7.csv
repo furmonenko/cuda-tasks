@@ -1,0 +1,5 @@
+Method,Time_ms,Throughput_MP_s,Bandwidth_GB_s,Correct
+CPU_Sequential,4.307667,15.213805,0.121710,true
+CUDA_Naive,0.751000,87.264980,0.698120,true
+CUDA_SharedMemory,0.762000,86.005249,0.688042,true
+CUDA_ConstantMemory,0.751000,87.264980,0.698120,true
