@@ -1,16 +1,21 @@
 # CUDA Programming Assignment: Advanced Filter Pipeline with Streams
 
-## ⚠️ Setup Required
+## 🚀 Setup Instructions
 
-**Before building this project, you must set up external dependencies:**
+**Use the complete template repository that includes all dependencies:**
 
-1. **Read [SETUP_DEPENDENCIES.md](../SETUP_DEPENDENCIES.md)** in the project root
-2. **Download required libraries**: OpenCV, Google Test, cxxopts, plog (~475MB total)
-3. **Follow the dependency setup instructions** before attempting to build
+```bash
+# Clone the foundation template with all dependencies included
+git clone https://github.com/lsawicki-cdv/course-accelerating-apps-nvidia-cuda.git
+cd course-accelerating-apps-nvidia-cuda/templates/cuda-webcam-filter
+
+# Copy our advanced pipeline implementation over the template
+# (Our implementation files are in this Task 4 folder)
+```
 
 ## Overview
 
-This assignment extends the CUDA webcam filter application to support a sophisticated filter pipeline that applies multiple filters sequentially while maintaining real-time performance. The implementation uses CUDA streams for concurrent processing and advanced filter chaining capabilities.
+This assignment extends the [CUDA webcam filter template](https://github.com/lsawicki-cdv/course-accelerating-apps-nvidia-cuda/tree/main/templates/cuda-webcam-filter) to support a sophisticated filter pipeline that applies multiple filters sequentially while maintaining real-time performance. The implementation uses CUDA streams for concurrent processing and advanced filter chaining capabilities.
 
 ## Tasks Completed
 
@@ -32,7 +37,22 @@ This assignment extends the CUDA webcam filter application to support a sophisti
 4. **Created real-time visualization** of filter pipeline timings with live updates
 5. **Documented findings** and optimization strategies in RESULTS.md
 
-## Quick Start
+## Build Instructions
+
+```bash
+# 1. Clone the template with all dependencies
+git clone https://github.com/lsawicki-cdv/course-accelerating-apps-nvidia-cuda.git
+cd course-accelerating-apps-nvidia-cuda/templates/cuda-webcam-filter
+
+# 2. Replace files with our advanced pipeline implementation
+cp -r /path/to/Task\ 4/cuda-webcam-filter/src/* ./src/
+# (Copy our enhanced files: filter_pipeline.*, convolution_kernels.cu, etc.)
+
+# 3. Build the project
+mkdir build && cd build
+cmake .. -DCMAKE_BUILD_TYPE=Release
+cmake --build . -j $(nproc)
+```
 
 ### Prerequisites
 ```bash
@@ -40,18 +60,7 @@ This assignment extends the CUDA webcam filter application to support a sophisti
 nvidia-smi
 nvcc --version
 
-# Setup dependencies (REQUIRED!)
-# See ../SETUP_DEPENDENCIES.md for complete instructions
-```
-
-### Build Instructions
-```bash
-# 1. Setup dependencies first (see SETUP_DEPENDENCIES.md)
-# 2. Build project
-cd cuda-webcam-filter
-mkdir build && cd build
-cmake .. -DCMAKE_BUILD_TYPE=Release
-make -j4
+# All other dependencies included in the template repository
 ```
 
 ### Usage Examples
@@ -84,5 +93,6 @@ make -j4
 ## Documentation
 
 - [RESULTS.md](./RESULTS.md): Performance analysis, benchmarks, and optimization findings
-- [SETUP_DEPENDENCIES.md](../SETUP_DEPENDENCIES.md): External dependency setup guide
+- [SETUP_DEPENDENCIES.md](../SETUP_DEPENDENCIES.md): Template repository setup guide
+- [Template Repository](https://github.com/lsawicki-cdv/course-accelerating-apps-nvidia-cuda/tree/main/templates/cuda-webcam-filter): Foundation with all dependencies
 - Source code with comprehensive comments and documentation

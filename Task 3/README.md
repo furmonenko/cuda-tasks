@@ -1,16 +1,21 @@
 # CUDA Programming Assignment: Real-Time HDR Tone Mapping
 
-## ⚠️ Setup Required
+## 🚀 Setup Instructions
 
-**Before building this project, you must set up external dependencies:**
+**Use the complete template repository that includes all dependencies:**
 
-1. **Read [SETUP_DEPENDENCIES.md](../SETUP_DEPENDENCIES.md)** in the project root
-2. **Download required libraries**: OpenCV, Google Test, cxxopts, plog (~315MB total)
-3. **Follow the dependency setup instructions** before attempting to build
+```bash
+# Clone the foundation template with all dependencies included
+git clone https://github.com/lsawicki-cdv/course-accelerating-apps-nvidia-cuda.git
+cd course-accelerating-apps-nvidia-cuda/templates/cuda-webcam-filter
+
+# Copy our HDR implementation over the template
+# (Our implementation files are in this Task 3 folder)
+```
 
 ## Overview
 
-This assignment extends the CUDA webcam filter template to implement real-time High Dynamic Range (HDR) tone mapping. While traditional cameras have limited dynamic range, HDR tone mapping algorithms simulate higher dynamic range by intelligently compressing the luminance range of an image to preserve details in both dark and bright regions.
+This assignment extends the [CUDA webcam filter template](https://github.com/lsawicki-cdv/course-accelerating-apps-nvidia-cuda/tree/main/templates/cuda-webcam-filter) to implement real-time High Dynamic Range (HDR) tone mapping. While traditional cameras have limited dynamic range, HDR tone mapping algorithms simulate higher dynamic range by intelligently compressing the luminance range of an image to preserve details in both dark and bright regions.
 
 The implementation transforms a standard webcam feed into one with enhanced dynamic range through GPU acceleration, allowing real-time video stream processing.
 
@@ -36,7 +41,22 @@ Extended the CUDA webcam filter template with:
 * Implemented shared memory usage where appropriate
 * Provided performance comparison between GPU and CPU implementations
 
-## Quick Start
+## Build Instructions
+
+```bash
+# 1. Clone the template with all dependencies
+git clone https://github.com/lsawicki-cdv/course-accelerating-apps-nvidia-cuda.git
+cd course-accelerating-apps-nvidia-cuda/templates/cuda-webcam-filter
+
+# 2. Replace files with our HDR implementation
+cp -r /path/to/Task\ 3/cuda-webcam-filter/src/* ./src/
+# (Copy our enhanced files: convolution_kernels.cu, filter_utils.*, etc.)
+
+# 3. Build the project
+mkdir build && cd build
+cmake .. -DCMAKE_BUILD_TYPE=Release
+cmake --build . -j $(nproc)
+```
 
 ### Prerequisites
 ```bash
@@ -44,18 +64,7 @@ Extended the CUDA webcam filter template with:
 nvidia-smi
 nvcc --version
 
-# Setup dependencies (REQUIRED!)
-# See ../SETUP_DEPENDENCIES.md for complete instructions
-```
-
-### Build Instructions
-```bash
-# 1. Setup dependencies first (see SETUP_DEPENDENCIES.md)
-# 2. Build project
-cd cuda-webcam-filter
-mkdir build && cd build
-cmake .. -DCMAKE_BUILD_TYPE=Release
-make -j4
+# All other dependencies included in the template repository
 ```
 
 ### Usage Examples
@@ -81,5 +90,5 @@ make -j4
 ## Documentation
 
 - [RESULTS.md](./RESULTS.md): Performance analysis and technical findings
-- [BUILD_INSTRUCTIONS.md](./BUILD_INSTRUCTIONS.md): Detailed compilation guide
 - [README_HDR_IMPLEMENTATION.md](./README_HDR_IMPLEMENTATION.md): Technical implementation details
+- [Template Repository](https://github.com/lsawicki-cdv/course-accelerating-apps-nvidia-cuda/tree/main/templates/cuda-webcam-filter): Foundation with all dependencies

@@ -37,14 +37,18 @@ nvcc --version
 sudo apt-get install cmake build-essential
 ```
 
-### ⚠️ Important: External Dependencies Setup
+### ⚠️ Important: Setup for Tasks 3 & 4
 
 **Tasks 3 & 4 require external libraries** (OpenCV, Google Test, etc.) that are excluded from this repository to reduce size.
 
-**Before building Tasks 3 & 4:**
-1. See [SETUP_DEPENDENCIES.md](./SETUP_DEPENDENCIES.md) for complete setup instructions
-2. Download required libraries (OpenCV, GTest, cxxopts, plog)
-3. Total download size: ~315-475MB per task
+**Use the Template Repository:**
+```bash
+git clone https://github.com/lsawicki-cdv/course-accelerating-apps-nvidia-cuda.git
+cd course-accelerating-apps-nvidia-cuda/templates/cuda-webcam-filter
+# Copy our implementation over the template - see TEMPLATE_SETUP_GUIDE.md
+```
+
+See [SETUP_DEPENDENCIES.md](./SETUP_DEPENDENCIES.md) for detailed instructions.
 
 ### Building Projects
 ```bash
